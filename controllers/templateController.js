@@ -29,39 +29,32 @@ const upload = multer({
 
 exports.create = async (req, res) => {
     try {
-        if (req.headers.authorization) {
-            upload.single('image')(req, res, async function (err) {
-                if (err) {
-                    console.error(err);
-                    res.send({
-                        success: false,
-                        message: 'Gagal mengupload gambar!',
-                    });
-                    return;
-                }
-
-                let data = {
-                    title: req.body.title,
-                    image: req.file.filename,
-                    des: req.body.des,
-                    id_user: req.user.id,
-                    id_categori: req.body.id_categori,
-                    source: req.body.source,
-                }
-
-                await Template.create(data);
+        upload.single('image')(req, res, async function (err) {
+            if (err) {
+                console.error(err);
                 res.send({
-                    success: true,
-                    message: 'Berhasil menambahkan data!',
-                    data: data
+                    success: false,
+                    message: 'Gagal mengupload gambar!',
                 });
-            });
-        } else {
+                return;
+            }
+
+            let data = {
+                title: req.body.title,
+                image: req.file.filename,
+                des: req.body.des,
+                id_user: req.user.id,
+                id_categori: req.body.id_categori,
+                source: req.body.source,
+            }
+
+            await Template.create(data);
             res.send({
-                success: false,
-                message: 'Login terlebih dahulu!'
+                success: true,
+                message: 'Berhasil menambahkan data!',
+                data: data
             });
-        }
+        });
     } catch (error) {
         console.info(error);
         res.send({
@@ -76,13 +69,13 @@ exports.findAll = (req, res) => {
         attributes: { exclude: ['password'] }
     }).then((templates) => {
         res.json({
-            message: "Berhasil menampilkan user!",
+            message: "Berhasil menampilkan template!",
             data: templates,
         });
     }).catch((err) => {
         console.info(err);
         res.status(500).json({
-            message: err.message || "Gagal menampilkan user!.",
+            message: err.message || "Gagal menampilkan template!.",
             data: null,
         });
     });
@@ -90,31 +83,30 @@ exports.findAll = (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        let id_template = req.params.id;
-        let user_id = req.user.id;
+        upload.single('image')(req, res, async function (err) {
+            if (err) {
+                console.error(err);
+                res.send({
+                    success: false,
+                    message: 'Gagal mengupload gambar!',
+                });
+                return;
+            }
+            let id_template = req.params.id;
 
-        const template = await Template.findOne({ where: { id: id_template } });
+            let data = {
+                title: req.body.title,
+                image: req.file.filename,
+                des: req.body.des,
+                id_categori: req.body.id_categori,
+                source: req.body.source,
+            }
 
-        if (!template || template.id_user !== user_id) {
-            res.status(403).json({
-                success: false,
-                message: 'Anda tidak memiliki izin untuk mengedit template ini.'
+            await Template.update(data, { where: { id: id_template } });
+            res.send({
+                success: true,
+                message: 'Berhasil edit data Template!'
             });
-            return;
-        }
-
-        let data = {
-            title: req.body.title,
-            image: req.file.filename,
-            des: req.body.des,
-            id_kategori: req.body.id_kategori,
-            source: req.body.source,
-        }
-
-        await Template.update(data, { where: { id: id_template } });
-        res.send({
-            success: true,
-            message: 'Berhasil edit data Template!'
         });
     } catch (error) {
         console.info(error);
@@ -196,4 +188,29 @@ exports.totalTemplate = async (req, res) => {
             message: error.stack
         });
     }
+};
+
+exports.findByCategori = (req, res) => {
+    Template.findAll({
+        where: { id_categori: req.params.id },
+        attributes: { exclude: ['password'] }
+    }).then((templates) => {
+        if (templates.length > 0) {
+            res.json({
+                message: "Berhasil menemukan template!",
+                data: templates,
+            });
+        } else {
+            res.status(404).json({
+                message: "Template tidak ditemukan untuk kategori ini.",
+                data: null,
+            });
+        }
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).json({
+            message: err.message || "Gagal menampilkan template!",
+            data: null,
+        });
+    });
 };

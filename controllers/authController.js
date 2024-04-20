@@ -24,19 +24,22 @@ function login(req, res) {
 
         if (isPasswordValid) {
             res.json({
+                success: true,
                 message: "Berhasil Login",
                 data,
-                token: jwt.sign({ id: data.id, email: data.email }, process.env.JWT_SECRET_KEY, {
+                token: jwt.sign({ id: data.id, email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, role: data.role }, process.env.JWT_SECRET_KEY, {
                     expiresIn: '1h'
                 }),
             });
         } else {
             res.status(401).json({
+                success: false,
                 message: "Login Gagal: email atau password",
             });
         }
     }).catch(function (error) {
         res.status(500).json({
+            success: false,
             message: "Login failed: An error occurred",
             error: error,
         });
@@ -74,6 +77,7 @@ function register(req, res){
                 role: role,
             }).then(function (newUser){
                 res.json({
+                    success: true,
                     message: "Registrasi Berhasil",
                     name: newUser.name,
                     image: newUser.image,
@@ -85,11 +89,17 @@ function register(req, res){
                     }),
                 });
             }).catch(function (error){
-                res.json({error: error}); 
+                res.json({
+                    success: false,
+                    error: error.message
+                }); 
             });
         }
     }).catch(function (error){
-        res.json({error: error});  
+        res.json({
+            success: false,
+            error: error
+        });  
     });
 }
 

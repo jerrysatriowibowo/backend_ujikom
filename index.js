@@ -19,6 +19,10 @@ const connection = mysql.createConnection({
     database: 'express_ujikom'
 });
 
+const path = require('path');
+const imagePath = path.join(__dirname, 'upload', 'images');
+app.use('/images/:id', express.static(imagePath));
+
 app.get('/api/v1/profil', (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
 
