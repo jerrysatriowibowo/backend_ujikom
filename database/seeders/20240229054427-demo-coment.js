@@ -4,11 +4,13 @@ module.exports = {
     coments = [];
 
     coments.push({
+      id_user: 3,
       des: 'admin',
       createdAt: new Date(),
       updatedAt: new Date()
     });
     coments.push({
+      id_user: 4,
       des: 'member',
       createdAt: new Date(),
       updatedAt: new Date()

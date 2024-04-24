@@ -1,5 +1,7 @@
 const db = require("../database/models");
 const Template = db.Template;
+const Categori = db.Categori;
+const User = db.User;
 const multer = require("multer");
 const path = require("path");
 
@@ -44,9 +46,18 @@ exports.create = async (req, res) => {
                 image: req.file.filename,
                 des: req.body.des,
                 id_user: req.user.id,
-                id_categori: req.body.id_categori,
                 source: req.body.source,
+            };
+
+            const category = await Categori.findOne({ name: req.body.id_categori });
+            if (!category) {
+                res.send({
+                    success: false,
+                    message: 'Kategori tidak ditemukan!',
+                });
+                return;
             }
+            data.id_categori = category.id;
 
             await Template.create(data);
             res.send({
@@ -56,24 +67,30 @@ exports.create = async (req, res) => {
             });
         });
     } catch (error) {
-        console.info(error);
+        console.error(error);
         res.send({
             success: false,
-            message: error.stack,
+            message: error.message,
         });
     }
 };
 
 exports.findAll = (req, res) => {
     Template.findAll({
-        attributes: { exclude: ['password'] }
-    }).then((templates) => {
+        attributes: { exclude: ['password'] },
+        include: [{
+            model: User,
+            attributes: ['email']
+        }]
+    })
+    .then((templates) => {
         res.json({
             message: "Berhasil menampilkan template!",
             data: templates,
         });
-    }).catch((err) => {
-        console.info(err);
+    })
+    .catch((err) => {
+        console.error(err);
         res.status(500).json({
             message: err.message || "Gagal menampilkan template!.",
             data: null,
@@ -81,35 +98,57 @@ exports.findAll = (req, res) => {
     });
 };
 
+async function updateTemplate(req, res, newImageFilename = null) {
+    try {
+        let id_template = req.params.id;
+
+        let data = {
+            title: req.body.title,
+            des: req.body.des,
+            id_categori: req.body.id_categori,
+            source: req.body.source,
+        };
+
+        if (newImageFilename) {
+            data.image = newImageFilename;
+        }
+
+        await Template.update(data, { where: { id: id_template } });
+        res.send({
+            success: true,
+            message: 'Berhasil edit data Template!'
+        });
+    } catch (error) {
+        console.error(error);
+        res.send({
+            success: false,
+            message: 'Terjadi kesalahan',
+            error: error.stack
+        });
+    }
+}
+
 exports.update = async (req, res) => {
     try {
         upload.single('image')(req, res, async function (err) {
-            if (err) {
+            if (err && err instanceof multer.MulterError && err.code === 'LIMIT_UNEXPECTED_FILE') {
+                updateTemplate(req, res);
+            } else if (err) {
                 console.error(err);
                 res.send({
                     success: false,
                     message: 'Gagal mengupload gambar!',
                 });
-                return;
+            } else {
+                if (req.file) {
+                    updateTemplate(req, res, req.file.filename);
+                } else {
+                    updateTemplate(req, res);
+                }
             }
-            let id_template = req.params.id;
-
-            let data = {
-                title: req.body.title,
-                image: req.file.filename,
-                des: req.body.des,
-                id_categori: req.body.id_categori,
-                source: req.body.source,
-            }
-
-            await Template.update(data, { where: { id: id_template } });
-            res.send({
-                success: true,
-                message: 'Berhasil edit data Template!'
-            });
         });
     } catch (error) {
-        console.info(error);
+        console.error(error);
         res.send({
             success: false,
             message: 'Terjadi kesalahan',

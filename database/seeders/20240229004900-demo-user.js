@@ -6,68 +6,68 @@ module.exports = {
     users = [];
     let salt = bcrypt.genSaltSync(10);
     users.push({
-      name: 'aa',
+      name: 'mimin',
       image: 'aa.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
-      role: 'member',
-      email: 'aa@gmail.com',
-      password: bcrypt.hashSync('aa', salt),
+      firstName: 'min',
+      lastName: 'premu',
+      role: 'admin',
+      email: 'admin@gmail.com',
+      password: bcrypt.hashSync('admin', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });
     users.push({
-      name: 'bb',
-      image: 'bb.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
+      name: 'member',
+      image: 'member.jpg',
+      firstName: 'mem',
+      lastName: 'premu',
       role: 'member',
-      email: 'bb@gmail.com',
-      password: bcrypt.hashSync('bb', salt),
+      email: 'member@gmail.com',
+      password: bcrypt.hashSync('member', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });
     users.push({
-      name: 'cc',
-      image: 'cc.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
+      name: 'memberTest',
+      image: 'memberTest.jpg',
+      firstName: 'member',
+      lastName: 'test',
       role: 'member',
-      email: 'cc@gmail.com',
-      password: bcrypt.hashSync('cc', salt),
+      email: 'memberTest@gmail.com',
+      password: bcrypt.hashSync('memberTest', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });
     users.push({
-      name: 'dd',
-      image: 'dd.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
+      name: 'memberTest2',
+      image: 'memberTest2.jpg',
+      firstName: 'member',
+      lastName: 'test2',
       role: 'member',
-      email: 'dd@gmail.com',
-      password: bcrypt.hashSync('dd', salt),
+      email: 'memberTest2@gmail.com',
+      password: bcrypt.hashSync('memberTest2', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });
     users.push({
-      name: 'ee',
-      image: 'ee.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
+      name: 'memberTest4',
+      image: 'memberTest4.jpg',
+      firstName: 'member',
+      lastName: 'test4',
       role: 'member',
-      email: 'ee@gmail.com',
-      password: bcrypt.hashSync('ee', salt),
+      email: 'memberTest4@gmail.com',
+      password: bcrypt.hashSync('memberTest4', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });
     users.push({
-      name: 'ff',
-      image: 'ff.jpg',
-      firstName: 'smk',
-      lastName: 'assalaam',
+      name: 'memberTest5',
+      image: 'memberTest5.jpg',
+      firstName: 'member',
+      lastName: 'test5',
       role: 'member',
-      email: 'ff@gmail.com',
-      password: bcrypt.hashSync('ff', salt),
+      email: 'memberTest5@gmail.com',
+      password: bcrypt.hashSync('memberTest5', salt),
       createdAt: new Date(),
       updatedAt: new Date()
     });

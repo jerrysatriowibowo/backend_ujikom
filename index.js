@@ -23,7 +23,7 @@ const path = require('path');
 const imagePath = path.join(__dirname, 'upload', 'images');
 app.use('/images/:id', express.static(imagePath));
 
-app.get('/api/v1/profil', (req, res) => {
+app.get('/api/v1/profile', (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
 
     const jwtToken = jwt.verify(token, process.env.JWT_SECRET_KEY);

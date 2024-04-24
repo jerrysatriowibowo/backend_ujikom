@@ -176,7 +176,7 @@ exports.editUser = async (req, res) => {
             updateFields.lastName = req.body.lastName;
         }
 
-        if (req.body.email && req.body.email.trim() !== '' && (emailSession.toUpperCase() !== (req.body.email.toUpperCase() || ''))) {
+        if (req.body.email && req.body.email.trim() !== '' && emailSession.toUpperCase() !== req.body.email.toUpperCase()) {
             const existingUser = await User.findOne({ where: { email: req.body.email } });
             if (existingUser) {
                 return res.send({

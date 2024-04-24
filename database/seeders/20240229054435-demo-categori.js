@@ -5,13 +5,19 @@ module.exports = {
 
     categoris.push({
       title: 'Bisnis',
-      image: 'smk.jpg',
+      image: 'bisnis.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     });
     categoris.push({
       title: 'Pendidikan',
-      image: 'smk.jpg',
+      image: 'pendidikan.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+    categoris.push({
+      title: 'Custom',
+      image: 'custom.jpg',
       createdAt: new Date(),
       updatedAt: new Date()
     });

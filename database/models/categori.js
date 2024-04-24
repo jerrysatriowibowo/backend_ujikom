@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Categori extends Model {
     static associate(models) {
-      Categori.belongsTo(models.Template, {foreignKey: 'id'});
+      Categori.hasMany(models.Template, { foreignKey: 'id_categori' }); // Satu kategori memiliki banyak template
     }
   }
   Categori.init({
